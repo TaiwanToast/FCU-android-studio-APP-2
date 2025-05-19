@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "81949007658",
+    "project_id": "check-in-d9be2",
+    "storage_bucket": "check-in-d9be2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:81949007658:android:2a933d459933a203ae8853",
+        "android_client_info": {
+          "package_name": "fcu.edu.check_in"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAgCi3Rd5KLYZinNNG_ngYngkJ24JkoWt4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
