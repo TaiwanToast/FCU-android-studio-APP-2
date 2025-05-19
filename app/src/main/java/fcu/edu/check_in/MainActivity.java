@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
             if (itemId == R.id.nav_home) {
                 selectedFragment = new HomeFragment();
             } else if (itemId == R.id.nav_profile) {
-                selectedFragment = new ProfileFragment(prefs);
+                selectedFragment = new ProfileFragment();
             } else if (itemId == R.id.nav_follow) {
                 selectedFragment = new FollowFragment();
             }
