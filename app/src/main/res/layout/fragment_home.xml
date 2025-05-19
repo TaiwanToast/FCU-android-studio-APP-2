@@ -13,25 +13,27 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/textView1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0"
             android:text="我的關注" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcv_follow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="2" />
 
         <TextView
-            android:id="@+id/textView3"
+            android:id="@+id/textView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0"
             android:text="其他表單" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcv_other"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="2" />
