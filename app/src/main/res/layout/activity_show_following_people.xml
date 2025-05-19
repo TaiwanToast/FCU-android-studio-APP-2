@@ -50,7 +50,7 @@
         app:layout_constraintTop_toBottomOf="@id/linearLayout" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/tv_interview_showFollowingPeople"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="簡介：這是一段簡單介紹"
@@ -64,11 +64,11 @@
         android:layout_height="wrap_content"
         android:text="關注的表單："
         app:layout_constraintStart_toStartOf="@id/tv_nickname_showFollowingPeople"
-        app:layout_constraintTop_toBottomOf="@id/textView2"
+        app:layout_constraintTop_toBottomOf="@id/tv_interview_showFollowingPeople"
         android:layout_marginTop="4dp" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_friendFollowingTask_show_FollowingPeople"
+        android:id="@+id/rv_friendFollowingTask_showFollowingPeople"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
