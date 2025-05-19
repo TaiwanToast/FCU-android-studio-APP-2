@@ -6,6 +6,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import fcu.edu.check_in.adapter.MyTaskAdapter;
+import fcu.edu.check_in.model.MyTask;
 
 public class HomeFragment extends Fragment {
 
@@ -16,7 +24,17 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        RecyclerView rvMyTask = view.findViewById(R.id.rv_My_Task);
+
+        List<MyTask> taskList = new ArrayList<>();
+        taskList.add(new MyTask("伏地挺身*10", "54PPE"));
+        taskList.add(new MyTask("跑10KM", "Toast"));
+
+        MyTaskAdapter adapter = new MyTaskAdapter(taskList);
+        rvMyTask.setLayoutManager(new LinearLayoutManager(getContext()));
+        rvMyTask.setAdapter(adapter);
+
+        return view;
     }
 }
