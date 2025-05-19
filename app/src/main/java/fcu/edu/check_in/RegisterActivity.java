@@ -13,8 +13,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import fcu.edu.check_in.model.Person;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -56,7 +60,11 @@ public class RegisterActivity extends AppCompatActivity {
                         Map<String, Object> userData = new HashMap<>();
                         userData.put("email", email);
                         userData.put("nickname", nickname);
-                        db.collection("users").document(uid).set(userData)
+                        List<String> list = new ArrayList<>();
+                        list.add("a");
+                        list.add("b");
+                        userData.put("list", list);
+                        db.collection("users").document(email).set(userData)
                                 .addOnSuccessListener(unused -> {
 
                                 })
