@@ -17,7 +17,7 @@
         app:layout_constraintEnd_toEndOf="parent">
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/btn_back_showFollowingPeople"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -31,11 +31,11 @@
         </FrameLayout>
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/btn_home_showFollowingPeople"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Button" />
+            android:text="Home" />
     </LinearLayout>
 
     <TextView

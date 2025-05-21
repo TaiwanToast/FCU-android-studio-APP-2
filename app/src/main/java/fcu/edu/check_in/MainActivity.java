@@ -3,24 +3,37 @@ package fcu.edu.check_in;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
 
-import androidx.annotation.NonNull;
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.io.File;
-
 public class MainActivity extends AppCompatActivity {
 
-    private SharedPreferences prefs;
+    private final String IS_SIGN_IN = "is_logged_in";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this); // 使用 EdgeToEdge
+        setContentView(R.layout.activity_main); // Step 2: 若已登入，顯示主畫面
+
+        // 處理系統 UI 邊距
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+
+        // Step 1: 檢查是否已登入
         SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
-        boolean isLoggedIn = prefs.getBoolean("is_logged_in", false);
+        boolean isLoggedIn = prefs.getBoolean(IS_SIGN_IN, false);
 
         if (!isLoggedIn) {
             // 第一次使用或尚未登入
@@ -28,35 +41,45 @@ public class MainActivity extends AppCompatActivity {
             finish(); // 關閉 MainActivity
             return;
         }
-        // Step 2: 若已登入，顯示主畫面
-        setContentView(R.layout.activity_main); // 你的主畫面 layout 檔
 
-        // Step 3: 預設顯示 HomeFragment
-        loadFragment(new HomeFragment());
+        // 建立 Fragment 實例
+        Fragment homeFragment = new HomeFragment();
+        Fragment profileFragment = new ProfileFragment();
+        Fragment followFragment = new FollowFragment();
+
+        // 根據傳入參數 navigate_to 決定初始 Fragment
+        String destination = getIntent().getStringExtra("navigate_to");
+        Fragment fragmentToShow;
+
+        if ("profile".equals(destination)) {
+            fragmentToShow = profileFragment;
+        } else if ("follow".equals(destination)) {
+            fragmentToShow = followFragment;
+        } else {
+            fragmentToShow = homeFragment; // Step 3: 預設顯示 HomeFragment
+        }
+
+        setCurrentFragment(fragmentToShow);
 
         // Step 4: 設定 BottomNavigation 切換
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnItemSelectedListener(item -> {
-            Fragment selectedFragment = null;
             int itemId = item.getItemId();
             if (itemId == R.id.nav_home) {
-                selectedFragment = new HomeFragment();
+                setCurrentFragment(homeFragment);
             } else if (itemId == R.id.nav_profile) {
-                selectedFragment = new ProfileFragment();
+                setCurrentFragment(profileFragment);
             } else if (itemId == R.id.nav_follow) {
-                selectedFragment = new FollowFragment();
+                setCurrentFragment(followFragment);
             }
-
-            if (selectedFragment != null) {
-                loadFragment(selectedFragment);
-                return true;
-            }
-            return false;
+            return true;
         });
     }
 
-    private void loadFragment(Fragment fragment) {
-        getSupportFragmentManager().beginTransaction()
+    // 載入指定的 Fragment
+    private void setCurrentFragment(Fragment fragment) {
+        getSupportFragmentManager()
+                .beginTransaction()
                 .replace(R.id.fragment_container, fragment)
                 .commit();
     }
