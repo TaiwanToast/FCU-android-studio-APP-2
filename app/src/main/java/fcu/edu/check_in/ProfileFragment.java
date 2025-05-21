@@ -1,7 +1,5 @@
 package fcu.edu.check_in;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,33 +14,25 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.Map;
 
-import fcu.edu.check_in.model.Person;
-
 public class ProfileFragment extends Fragment {
-    private Person person;
+
+    private static final String TAG = "ProfileFragment";
+
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    SharedPreferences prefs;
+    private SharedPreferences prefs;
     private TextView tvName;
     private Button btnLogout;
-    public ProfileFragment() {
-        // Required empty public constructor
-    }
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if (context != null) {
-            prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
-
-        }
+        prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
     }
 
     @Override
@@ -54,50 +44,42 @@ public class ProfileFragment extends Fragment {
         tvName = view.findViewById(R.id.text_nickname);
 
         btnLogout.setOnClickListener(v -> {
-            SharedPreferences.Editor editor = prefs.edit();
             prefs.edit().putBoolean("is_logged_in", false).apply();
             Intent intent = new Intent(getActivity(), LoginActivity.class);
             startActivity(intent);
+            requireActivity().finish();
         });
 
-//        db.collection("users").whereEqualTo("email", prefs.getString("email", "")).get().addOnSuccessListener(
-//                querySnapshot  -> {
-//                    for (QueryDocumentSnapshot doc : querySnapshot) {
-//                        tvName.setText(doc.getData().toString());
-//                    }
-//                }
-//        );
-//        this.tvName.setText(prefs.getString(""));
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-//        String uid = auth.getCurrentUser().getUid();
-        String email = prefs.getString("email", "");
-        DocumentReference docRef = db.collection("users").document(email);
+        // 取得 email，並做 null/空字串檢查
+        String email = prefs.getString("email", null);
+        if (email == null || email.isEmpty()) {
+            Log.e(TAG, "Email 為 null 或空字串");
+            tvName.setText("尚未登入使用者");
+            return view;
+        }
 
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
-                        Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-//                        tvName.setText(document.getData().toString());
-                        Map<String, Object> map = document.getData();
-                        String nickName = map.get("nickname").toString();
-                        tvName.setText(nickName);
+        DocumentReference docRef = db.collection("users").document(email);
+        docRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    Map<String, Object> map = document.getData();
+                    if (map != null && map.containsKey("nickname")) {
+                        Object nicknameObj = map.get("nickname");
+                        tvName.setText(nicknameObj != null ? nicknameObj.toString() : "無暱稱");
                     } else {
-                        Log.d(TAG, "No such document");
+                        tvName.setText("暱稱未設定");
                     }
                 } else {
-                    Log.d(TAG, "get failed with ", task.getException());
+                    Log.w(TAG, "使用者資料不存在");
+                    tvName.setText("查無使用者資料");
                 }
+            } else {
+                Log.e(TAG, "Firestore 查詢失敗", task.getException());
+                tvName.setText("載入使用者資料失敗");
             }
         });
 
-
-//        return inflater.inflate(R.layout.fragment_profile, container, false);
         return view;
     }
-
-
-
 }
