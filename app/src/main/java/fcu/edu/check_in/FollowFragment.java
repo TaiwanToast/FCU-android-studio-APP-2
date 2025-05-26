@@ -41,7 +41,8 @@ public class FollowFragment extends Fragment {
         btn_searchFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(FollowFragment.this, );
+                Intent intent = new Intent(getContext(), SearchFriendActivity.class);
+                startActivity(intent);
             }
         });
 
