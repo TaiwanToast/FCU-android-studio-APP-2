@@ -57,14 +57,17 @@ public class RegisterActivity extends AppCompatActivity {
                     .addOnSuccessListener(authResult -> {
                         String uid = auth.getCurrentUser().getUid();
 
-                        Map<String, Object> userData = new HashMap<>();
-                        userData.put("email", email);
-                        userData.put("nickname", nickname);
-                        List<String> list = new ArrayList<>();
-                        list.add("a");
-                        list.add("b");
-                        userData.put("list", list);
-                        db.collection("users").document(email).set(userData)
+//                        Map<String, Object> userData = new HashMap<>();
+//                        userData.put("email", email);
+//                        userData.put("nickName", nickname);
+//                        List<String> list = new ArrayList<>();
+//                        list.add("a");
+//                        list.add("b");
+//                        userData.put("list", list);
+
+                        Person person = new Person(nickname, "", email, null, null);
+
+                        db.collection("users").document(email).set(person)
                                 .addOnSuccessListener(unused -> {
 
                                 })

@@ -20,6 +20,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Map;
 
+import fcu.edu.check_in.model.Person;
+import fcu.edu.check_in.model.PersonManager;
+
 public class ProfileFragment extends Fragment {
 
     private static final String TAG = "ProfileFragment";
@@ -58,27 +61,31 @@ public class ProfileFragment extends Fragment {
             return view;
         }
 
-        DocumentReference docRef = db.collection("users").document(email);
-        docRef.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                DocumentSnapshot document = task.getResult();
-                if (document.exists()) {
-                    Map<String, Object> map = document.getData();
-                    if (map != null && map.containsKey("nickName")) {
-                        Object nicknameObj = map.get("nickName");
-                        tvName.setText(nicknameObj != null ? nicknameObj.toString() : "無暱稱");
-                    } else {
-                        tvName.setText("暱稱未設定");
-                    }
-                } else {
-                    Log.w(TAG, "使用者資料不存在");
-                    tvName.setText("查無使用者資料");
-                }
-            } else {
-                Log.e(TAG, "Firestore 查詢失敗", task.getException());
-                tvName.setText("載入使用者資料失敗");
-            }
-        });
+        Person person = PersonManager.getInstance().getCurrentPerson();
+
+        tvName.setText(person.getNickName());
+
+//        DocumentReference docRef = db.collection("users").document(email);
+//        docRef.get().addOnCompleteListener(task -> {
+//            if (task.isSuccessful()) {
+//                DocumentSnapshot document = task.getResult();
+//                if (document.exists()) {
+//                    Map<String, Object> map = document.getData();
+//                    if (map != null && map.containsKey("nickName")) {
+//                        Object nicknameObj = map.get("nickName");
+//                        tvName.setText(nicknameObj != null ? nicknameObj.toString() : "無暱稱");
+//                    } else {
+//                        tvName.setText("暱稱未設定");
+//                    }
+//                } else {
+//                    Log.w(TAG, "使用者資料不存在");
+//                    tvName.setText("查無使用者資料");
+//                }
+//            } else {
+//                Log.e(TAG, "Firestore 查詢失敗", task.getException());
+//                tvName.setText("載入使用者資料失敗");
+//            }
+//        });
 
         return view;
     }

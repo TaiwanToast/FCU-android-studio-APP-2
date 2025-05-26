@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Person {
+
     private String nickName, bio;
     private final String email;
 

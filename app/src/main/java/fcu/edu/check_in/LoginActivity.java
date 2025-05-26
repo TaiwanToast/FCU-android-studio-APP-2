@@ -20,6 +20,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+
+import fcu.edu.check_in.model.Person;
+import fcu.edu.check_in.model.PersonManager;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -56,6 +60,7 @@ public class LoginActivity extends AppCompatActivity {
                             prefs.edit().putBoolean("is_logged_in", true).apply();
                             prefs.edit().putString("email", email).apply();
 
+<<<<<<< HEAD
 //                        String nickName, bio;
 //                        List<String> followPersonEmail = new ArrayList<>();
 //                        Map<String, Map<String, String>> followingTaskID;
@@ -85,6 +90,40 @@ public class LoginActivity extends AppCompatActivity {
                         })
                         .addOnFailureListener(e -> {
                             Toast.makeText(this, "登入失敗: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+=======
+                        docRef.get().addOnCompleteListener(task -> {
+                            String nickName = "", bio = "";
+                            List<String> followPersonEmail;
+                            Map<String, Map<String, String>> followingTaskID;
+                            if(task.isSuccessful()){
+                                DocumentSnapshot doc = task.getResult();
+                                if(doc.exists()) {
+                                    Map<String, Object> map = doc.getData();
+                                    if(map != null){
+                                        if(map.containsKey("nickName")){
+                                            nickName = Objects.requireNonNull(map.get("nickName")).toString();
+//                                            Log.d(TAG, "nick name is " + nickName);
+                                        } else {
+                                            Log.d(TAG, "nick name does not exist");
+                                        }
+                                        if(map.containsKey("bio")){
+                                            bio = Objects.requireNonNull(map.get("bio")).toString();
+                                        } else {
+                                            Log.d(TAG, "bio does not exist");
+                                        }
+
+                                        Person person = new Person(nickName, bio, email, null, null);
+                                        PersonManager.getInstance().setCurrentPerson(person);
+                                    } else {
+                                        Log.d(TAG, "map is null");
+                                    }
+                                } else {
+                                    Log.w(TAG, "使用者資料不存在");
+                                }
+                           }else{
+                               Log.e(TAG, "Firebase 查詢失敗", task.getException());
+                           }
+>>>>>>> bffce14 (修好資料庫的部分了，另外完善使用者在畚箕的資料存取)
                         });
 
             }
