@@ -33,24 +33,28 @@
             android:padding="16dp">
 
             <!-- 標題欄位 -->
-            <TextView android:text="標題:" />
-            <EditText
-                android:id="@+id/editTitle"
+            <TextView
+                android:id="@+id/checkTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="請輸入標題" />
+                android:text="打卡單名稱"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
-            <!-- 簡介欄位（多行、可捲動） -->
-            <TextView android:text="簡介:" />
-            <EditText
-                android:id="@+id/editDescription"
+            <!-- 打卡單簡述 -->
+            <TextView
+                android:id="@+id/checkDescription"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:gravity="top"
-                android:hint="請輸入簡介"
-                android:inputType="textMultiLine"
-                android:maxLines="5"
-                android:scrollbars="vertical" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="打卡單簡述：這裡是簡介內容"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/checkTitle" />
 
             <!-- 時間設定 -->
             <TextView android:text="推播時間：" />
