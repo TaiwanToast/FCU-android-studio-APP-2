@@ -1,3 +1,8 @@
-以email為主鍵 DocumentSnapshot data: {nickname=mmm, email=mmm@gmail.com}
-
-{nickname=mmm, email=mmm@gmail.com}
+以email為主鍵 DocumentSnapshot data
+{
+    nickname: String,
+    email: String,
+    bio: String,
+    followPersonEmail: List<String>,
+    myTasks: List<String>
+}
