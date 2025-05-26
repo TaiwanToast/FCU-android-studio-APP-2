@@ -23,7 +23,6 @@ public class Person {
     public String getEmail() {return email;}
     public void setBio(String bio) { this.bio = bio; }
     public void setNickName(String nickName) { this.nickName = nickName; }
-
     public void addFollow(String followEmail){ this.followPersonEmail.add(followEmail); }
     public void addTask(MyTask newTask){ this.myTasks.add(newTask); }
 }
