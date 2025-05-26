@@ -64,8 +64,8 @@ public class ProfileFragment extends Fragment {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
                     Map<String, Object> map = document.getData();
-                    if (map != null && map.containsKey("nickname")) {
-                        Object nicknameObj = map.get("nickname");
+                    if (map != null && map.containsKey("nickName")) {
+                        Object nicknameObj = map.get("nickName");
                         tvName.setText(nicknameObj != null ? nicknameObj.toString() : "無暱稱");
                     } else {
                         tvName.setText("暱稱未設定");
