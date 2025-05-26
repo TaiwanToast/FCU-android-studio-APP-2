@@ -42,46 +42,52 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(v -> {
             String email = etEmail.getText().toString();
             String password = etPassword.getText().toString();
+            if (email.isEmpty()){
+                Toast.makeText(this, "email不可為空 " , Toast.LENGTH_SHORT).show();
+            }else if(password.isEmpty()){
+                Toast.makeText(this, "密碼不可為空 " , Toast.LENGTH_SHORT).show();
+            }else {
+                auth.signInWithEmailAndPassword(email, password)
+                        .addOnSuccessListener(authResult -> {
+                            FirebaseFirestore db = FirebaseFirestore.getInstance();
+                            DocumentReference docRef = db.collection("users").document(email);
 
-            auth.signInWithEmailAndPassword(email, password)
-                    .addOnSuccessListener(authResult -> {
-                        FirebaseFirestore db = FirebaseFirestore.getInstance();
-                        DocumentReference docRef = db.collection("users").document(email);
-
-                        SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
-                        prefs.edit().putBoolean("is_logged_in", true).apply();
-                        prefs.edit().putString("email", email).apply();
+                            SharedPreferences prefs = getSharedPreferences("user_prefs", MODE_PRIVATE);
+                            prefs.edit().putBoolean("is_logged_in", true).apply();
+                            prefs.edit().putString("email", email).apply();
 
 //                        String nickName, bio;
 //                        List<String> followPersonEmail = new ArrayList<>();
 //                        Map<String, Map<String, String>> followingTaskID;
-                        docRef.get().addOnCompleteListener(task -> {
-                           if(task.isSuccessful()){
-                               DocumentSnapshot document = task.getResult();
-                               if(document.exists()){
-                                   Map<String, Object> map = document.getData();
-                                   if(map != null){
-                                       String nickName = map.get("nickName").toString();
-                                       prefs.edit().putString("nickName", nickName).apply();
-                                       List<String> followPersonEmail = new ArrayList<>();
-                                       String bio = map.get("bio").toString();
-                                       prefs.edit().putString("bio", bio).apply();
-                                       
-                                   }
-                               } else {
-                                   Log.w(TAG, "使用者資料不存在");
-                               }
-                           } else {
-                               Log.e(TAG, "Firesstore 查詢失敗", task.getException());
-                           }
+                            docRef.get().addOnCompleteListener(task -> {
+                                if(task.isSuccessful()){
+                                    DocumentSnapshot document = task.getResult();
+                                    if(document.exists()){
+                                        Map<String, Object> map = document.getData();
+                                        if(map != null){
+                                            String nickName = map.get("nickName").toString();
+                                            prefs.edit().putString("nickName", nickName).apply();
+                                            List<String> followPersonEmail = new ArrayList<>();
+                                            String bio = map.get("bio").toString();
+                                            prefs.edit().putString("bio", bio).apply();
+
+                                        }
+                                    } else {
+                                        Log.w(TAG, "使用者資料不存在");
+                                    }
+                                } else {
+                                    Log.e(TAG, "Firesstore 查詢失敗", task.getException());
+                                }
+                            });
+
+                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                            finish();
+                        })
+                        .addOnFailureListener(e -> {
+                            Toast.makeText(this, "登入失敗: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                         });
 
-                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                        finish();
-                    })
-                    .addOnFailureListener(e -> {
-                        Toast.makeText(this, "登入失敗: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                    });
+            }
         });
 
         btnRegister.setOnClickListener(v ->
