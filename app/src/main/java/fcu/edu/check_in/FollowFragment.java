@@ -1,5 +1,6 @@
 package fcu.edu.check_in;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +28,7 @@ public class FollowFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_follow, container, false);
         RecyclerView rvPeopleFollow = view.findViewById(R.id.rv_poeple_follow);
+        Button btn_searchFriend = view.findViewById(R.id.btn_searchFriend);
 
         List<FollowPeople> peopleList = new ArrayList<>();
         peopleList.add(new FollowPeople("54PPE"));
@@ -35,6 +37,13 @@ public class FollowFragment extends Fragment {
         FollowPeopleAdapter adapter = new FollowPeopleAdapter(peopleList);
         rvPeopleFollow.setLayoutManager(new LinearLayoutManager(getContext()));
         rvPeopleFollow.setAdapter(adapter);
+
+        btn_searchFriend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(FollowFragment.this, );
+            }
+        });
 
         return view;
     }
