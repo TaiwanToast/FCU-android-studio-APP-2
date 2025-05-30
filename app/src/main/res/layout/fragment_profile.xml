@@ -9,7 +9,7 @@
     <!-- 設定按鈕（右上） -->
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/btnsetting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="20dp"
@@ -44,12 +44,12 @@
         android:id="@+id/text_bio"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="這是個人簡介，描述這位使用者的個性或興趣。"
-        app:layout_constraintTop_toBottomOf="@id/text_nickname"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="8dp" />
+        android:layout_marginTop="8dp"
+        android:text="這位使用者並未修改簡介"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_nickname" />
 
     <!-- 標題：關注的打卡單 -->
     <TextView

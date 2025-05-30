@@ -31,6 +31,7 @@ public class ProfileFragment extends Fragment {
     private SharedPreferences prefs;
     private TextView tvName;
     private Button btnLogout;
+    private Button btnSetting;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -45,12 +46,17 @@ public class ProfileFragment extends Fragment {
 
         btnLogout = view.findViewById(R.id.btn_logout);
         tvName = view.findViewById(R.id.text_nickname);
-
+        btnSetting = view.findViewById(R.id.btnsetting);
         btnLogout.setOnClickListener(v -> {
             prefs.edit().putBoolean("is_logged_in", false).apply();
             Intent intent = new Intent(getActivity(), LoginActivity.class);
             startActivity(intent);
             requireActivity().finish();
+        });
+
+        btnSetting.setOnClickListener(v -> {
+            Intent intenttosetting = new Intent(getActivity(), edit_Profile.class);
+            startActivity(intenttosetting);
         });
 
         // 取得 email，並做 null/空字串檢查
