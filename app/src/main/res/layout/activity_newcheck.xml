@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/main"
     tools:context=".edit_check">
 
     <!-- 返回按鈕 -->
@@ -31,17 +32,12 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- 標題欄位 -->
-            <TextView android:text="標題:" />
 
             <EditText
                 android:id="@+id/editTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="請輸入標題" />
-
-            <!-- 簡介欄位（多行、可捲動） -->
-            <TextView android:text="簡介:" />
 
             <EditText
                 android:id="@+id/editDescription"

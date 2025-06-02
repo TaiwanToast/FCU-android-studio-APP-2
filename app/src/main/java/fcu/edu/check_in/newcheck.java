@@ -52,30 +52,28 @@ public class newcheck extends AppCompatActivity {
         btnback.setOnClickListener(v -> finish());
 
         btnaddcheck.setOnClickListener(v -> {
-            // 先取得最後一筆文件ID
-            db.collection("task")
-                    .orderBy(FieldPath.documentId())
-                    .limitToLast(1)
-                    .get()
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful() && !task.getResult().isEmpty()) {
-                            DocumentSnapshot lastDoc = task.getResult().getDocuments().get(0);
-                            String lastId = lastDoc.getId();
-                            Log.d("Firestore", "最後文件ID：" + lastId);
+            db.collection("task").document("totalcounter").get().addOnSuccessListener(documentSnapshot -> {
+                if (documentSnapshot.exists()) {
+                    String count = documentSnapshot.getString("count");  // ✅ 正確取得為 Long 類型
+                    if (count != null) {
+                        Integer newId = new Integer(count) + 1;
+                        Log.d("Firestore", "取得 count: " + newId);
+                        addNewTask(String.format("%04d", newId));  // ✅ 正確格式化成 4 位數的字串
 
-                            // 轉成數字並 +1
-                            int newIdInt = Integer.parseInt(lastId) + 1;
-                            // 格式化成4位數字字串，例如 0002
-                            String newId = String.format("%04d", newIdInt);
-
-                            // 新增資料
-                            addNewTask(newId);
-                        } else {
-                            // 如果沒文件，第一筆ID為 0001
-                            addNewTask("0001");
-                        }
-                    });
+                        // 更新 count 欄位
+                        db.collection("task").document("totalcounter")
+                                .update("count", newId)
+                                .addOnSuccessListener(aVoid -> Log.d("Firestore", "count 更新為 " + newId))
+                                .addOnFailureListener(e -> Log.e("Firestore", "更新失敗", e));
+                    }
+                } else {
+                    Log.d("Firestore", "文件不存在");
+                }
+            }).addOnFailureListener(e -> {
+                Log.e("Firestore", "讀取失敗", e);
+            });
         });
+
     }
 
     private void addNewTask(String newId) {
