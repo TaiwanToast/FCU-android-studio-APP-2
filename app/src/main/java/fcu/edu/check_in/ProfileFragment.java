@@ -14,11 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.Map;
 
 import fcu.edu.check_in.model.Person;
 import fcu.edu.check_in.model.PersonManager;
@@ -29,7 +25,7 @@ public class ProfileFragment extends Fragment {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private SharedPreferences prefs;
-    private TextView tvName;
+    private TextView tvName,tvBio;
     private Button btnLogout;
     private Button btnSetting;
 
@@ -37,6 +33,8 @@ public class ProfileFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
+        Person person = PersonManager.getInstance().getCurrentPerson();
+        tvName.setText(person.getNickName());
     }
 
     @Override
@@ -46,6 +44,7 @@ public class ProfileFragment extends Fragment {
 
         btnLogout = view.findViewById(R.id.btn_logout);
         tvName = view.findViewById(R.id.text_nickname);
+        tvBio = view.findViewById(R.id.tv_bio);
         btnSetting = view.findViewById(R.id.btnsetting);
         btnLogout.setOnClickListener(v -> {
             prefs.edit().putBoolean("is_logged_in", false).apply();
@@ -70,6 +69,7 @@ public class ProfileFragment extends Fragment {
         Person person = PersonManager.getInstance().getCurrentPerson();
 
         tvName.setText(person.getNickName());
+        //tvBio.setText(person.getBio());
 
 //        DocumentReference docRef = db.collection("users").document(email);
 //        docRef.get().addOnCompleteListener(task -> {

@@ -19,7 +19,7 @@ public class Person {
         this.followingTaskID = followingTaskID;
     }
 
-    public String getNickName(){ return this.nickName;};
+    public String getNickName(){ return this.nickName;}
     public String getBio() { return bio; }
     public String getEmail() {return email;}
 

@@ -41,7 +41,7 @@
 
     <!-- 個人簡介 -->
     <TextView
-        android:id="@+id/text_bio"
+        android:id="@+id/tv_bio"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
@@ -59,7 +59,7 @@
         android:text="關注的打卡單"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/text_bio"
+        app:layout_constraintTop_toBottomOf="@id/tv_bio"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="24dp"
         android:layout_marginStart="16dp" />
