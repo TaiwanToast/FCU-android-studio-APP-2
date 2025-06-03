@@ -1,9 +1,14 @@
 package fcu.edu.check_in;
 
+import static android.content.ContentValues.TAG;
+
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +18,16 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
+import fcu.edu.check_in.model.Person;
+import fcu.edu.check_in.model.PersonManager;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,8 +55,47 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
             finish(); // 關閉 MainActivity
             return;
-        }
+        }else{
+            String email = prefs.getString("email", null).toString();
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            DocumentReference docRef = db.collection("users").document(email);
+            docRef.get().addOnCompleteListener(task -> {
+                String nickName = "", bio = "";
+                List<String> followPersonEmail;
+                Map<String, Map<String, String>> followingTaskID;
+                if (task.isSuccessful()) {
+                    DocumentSnapshot doc = task.getResult();
+                    if (doc.exists()) {
+                        Map<String, Object> map = doc.getData();
+                        if (map != null) {
+                            if (map.containsKey("nickName")) {
+                                nickName = Objects.requireNonNull(map.get("nickName")).toString();
+//                                            Log.d(TAG, "nick name is " + nickName);
+                            } else {
+                                Log.d(TAG, "nick name does not exist");
+                            }
+                            if (map.containsKey("bio")) {
+                                bio = Objects.requireNonNull(map.get("bio")).toString();
+                            } else {
+                                Log.d(TAG, "bio does not exist");
+                            }
 
+                            Person person = new Person(nickName, bio, email, null, null);
+                            PersonManager.getInstance().setCurrentPerson(person);
+                            Person persons = PersonManager.getInstance().getCurrentPerson();
+                            Toast.makeText(this, persons.getNickName(), Toast.LENGTH_SHORT).show();
+                        } else {
+                            Log.d(TAG, "map is null");
+                        }
+                    } else {
+                        Log.w(TAG, "使用者資料不存在");
+                    }
+                } else {
+                    Log.e(TAG, "Firebase 查詢失敗", task.getException());
+                }
+
+            });
+        }
         // 建立 Fragment 實例
         Fragment homeFragment = new HomeFragment();
         Fragment profileFragment = new ProfileFragment();

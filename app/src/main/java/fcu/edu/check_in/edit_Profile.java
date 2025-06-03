@@ -18,6 +18,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
+import fcu.edu.check_in.model.Person;
+import fcu.edu.check_in.model.PersonManager;
 
 public class edit_Profile extends AppCompatActivity {
     private EditText etName, etbio;
@@ -48,24 +50,40 @@ public class edit_Profile extends AppCompatActivity {
             String email = prefs.getString("email", null);
 
             if (email != null) {
+                if (newName.isEmpty() || newBio.isEmpty()) {
+                    Toast.makeText(edit_Profile.this, "暱稱或個人簡介不能為空", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 Map<String, Object> updates = new HashMap<>();
-                updates.put("name", newName);
+                updates.put("nickName", newName);
                 updates.put("bio", newBio);
 
                 db.collection("users").document(email)
                         .update(updates)
                         .addOnSuccessListener(unused -> {
-                            Toast.makeText(this, "資料更新成功", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(edit_Profile.this, "資料更新成功", Toast.LENGTH_SHORT).show();
+
+                            Person person = PersonManager.getInstance().getCurrentPerson();
+                            if (person != null) {
+                                person.setNickName(newName);
+                                person.setBio(newBio);
+                            }
+
+                            Intent resultIntent = new Intent();
+                            resultIntent.putExtra("profile_updated", true);
+                            setResult(RESULT_OK, resultIntent);
+
                             finish();
                         })
                         .addOnFailureListener(e ->
-                                Toast.makeText(this, "儲存資料失敗: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                                Toast.makeText(edit_Profile.this, "儲存資料失敗: " + e.getMessage(), Toast.LENGTH_SHORT).show()
                         );
             } else {
-                Toast.makeText(this, "找不到使用者 Email", Toast.LENGTH_SHORT).show();
+                Toast.makeText(edit_Profile.this, "找不到使用者 Email", Toast.LENGTH_SHORT).show();
             }
-
         });
+
 
     }
 }
