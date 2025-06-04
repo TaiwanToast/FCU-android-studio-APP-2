@@ -82,9 +82,7 @@ public class MainActivity extends AppCompatActivity {
 
                             Person person = new Person(nickName, bio, email, null, null);
                             PersonManager.getInstance().setCurrentPerson(person);
-                            Person persons = PersonManager.getInstance().getCurrentPerson();
-                            Toast.makeText(this, persons.getNickName(), Toast.LENGTH_SHORT).show();
-                        } else {
+                            } else {
                             Log.d(TAG, "map is null");
                         }
                     } else {
