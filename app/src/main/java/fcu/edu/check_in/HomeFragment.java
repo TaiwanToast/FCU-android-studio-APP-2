@@ -58,8 +58,7 @@ public class HomeFragment extends Fragment {
         taskDataManager.getTotalCounter(new FirestoreCallback() {
             @Override
             public void onCallback(int counter) {
-//                Log.d(TAG, "Total counter: " + number);
-                initTaskList(counter, adapter);
+                taskListFactory(counter, adapter);
             }
         });
 
@@ -73,7 +72,11 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
-    private void initTaskList(int count, MyTaskAdapter adapter){
+    private void taskListFactory(int count, MyTaskAdapter adapter){
+        /*
+        從firebase中抓取打卡單
+        目前打卡單擁有者先以email代替
+         */
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
         for(int i = 1; i <= count; i++){
