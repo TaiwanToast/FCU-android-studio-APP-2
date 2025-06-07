@@ -2,6 +2,7 @@ package fcu.edu.check_in;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -87,12 +88,31 @@ public class newcheck extends AppCompatActivity {
                 .set(new_task)
                 .addOnSuccessListener(aVoid -> {
                     Toast.makeText(newcheck.this, "新增成功，ID：" + newId, Toast.LENGTH_SHORT).show();
-                    clearFields();
+
+                    // ✅ 更新 user collection 中 fofo... 欄位
+                    Map<String, Object> nestedData = new HashMap<>();
+                    nestedData.put("startime", "");
+                    nestedData.put("week", "");
+
+                    db.collection("user")
+                            .document(email)
+                            .update(FieldPath.of("followingTaskID", newId), nestedData)
+                            .addOnSuccessListener(unused -> Log.d("Firestore", "fofollowingTaskID 更新成功"))
+                            .addOnFailureListener(e -> Log.e("Firestore", "fofollowingTaskID 更新失敗", e));
+
+                    // ✅ 導向 edit_check 並傳 taskID
+                    Intent intent = new Intent(newcheck.this, edit_check.class);
+                    intent.putExtra("taskID", newId);
+                    startActivity(intent);
+                    finish();
+
                 })
                 .addOnFailureListener(e -> {
                     Toast.makeText(newcheck.this, "新增失敗：" + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
     }
+
+
 
     private void clearFields() {
         edTitle.setText("");

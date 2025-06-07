@@ -1,10 +1,10 @@
 package fcu.edu.check_in.adapter;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import fcu.edu.check_in.R;
+import fcu.edu.check_in.edit_check;
 import fcu.edu.check_in.model.MyTask;
 
 public class MyTaskAdapter extends RecyclerView.Adapter<MyTaskAdapter.ViewHolder> {
@@ -26,7 +27,7 @@ public class MyTaskAdapter extends RecyclerView.Adapter<MyTaskAdapter.ViewHolder
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_my_task, parent, false); // item_task.xml 是你的自定義 layout
+                .inflate(R.layout.item_my_task, parent, false);
         return new ViewHolder(view);
     }
 
@@ -37,7 +38,9 @@ public class MyTaskAdapter extends RecyclerView.Adapter<MyTaskAdapter.ViewHolder
         holder.initiatorText.setText(task.getInitiator());
 
         holder.itemView.setOnClickListener(v -> {
-            Toast.makeText(v.getContext(), task.getTitle(), Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(v.getContext(), edit_check.class);
+            intent.putExtra("taskID", task.getTaskID()); // 傳入 taskID
+            v.getContext().startActivity(intent);
         });
     }
 

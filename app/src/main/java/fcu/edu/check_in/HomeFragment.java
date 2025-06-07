@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 
 import fcu.edu.check_in.adapter.MyTaskAdapter;
+import fcu.edu.check_in.adapter.OtherTaskAdapter;
 import fcu.edu.check_in.callBack.FirestoreCallback;
 import fcu.edu.check_in.model.MyTask;
 import fcu.edu.check_in.model.TaskDataManager;
@@ -82,7 +83,8 @@ public class HomeFragment extends Fragment {
     // ✅ 設定其他人的任務列表
     private void setupOtherRecyclerView(View view) {
         RecyclerView rvOtherTask = view.findViewById(R.id.rcv_other);
-        MyTaskAdapter adapter = new MyTaskAdapter(otherTaskList);
+        OtherTaskAdapter adapter = new OtherTaskAdapter(otherTaskList);
+
 
         rvOtherTask.setLayoutManager(new LinearLayoutManager(getContext()));
         rvOtherTask.setAdapter(adapter);
@@ -97,7 +99,7 @@ public class HomeFragment extends Fragment {
                             Map<String, Object> map = document.getData();
                             otherTaskList.clear();
                             adapter.notifyDataSetChanged();
-                            otherTaskList.add(new MyTask((String) map.get("title"), (String) map.get("ownerEmail")));
+                            otherTaskList.add(new MyTask((String) map.get("title"), (String) map.get("ownerEmail"),document.getId()));
                             adapter.notifyItemInserted(otherTaskList.size() - 1);
                         }
                     } else {
@@ -143,8 +145,7 @@ public class HomeFragment extends Fragment {
                                 if (taskData != null) {
                                     String title = (String) taskData.get("title");
                                     String ownerEmail = (String) taskData.get("ownerEmail");
-
-                                    MyTask myTask = new MyTask(title, ownerEmail);// startDate, week
+                                    MyTask myTask = new MyTask(title, ownerEmail,taskID);// startDate, week
                                     mineTaskList.add(myTask);
                                     adapter.notifyItemInserted(mineTaskList.size() - 1);
                                 }
