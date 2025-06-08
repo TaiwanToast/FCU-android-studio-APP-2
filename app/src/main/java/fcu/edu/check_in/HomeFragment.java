@@ -32,6 +32,7 @@ import fcu.edu.check_in.model.TaskDataManager;
 public class HomeFragment extends Fragment {
 
     private Button btnAddCheck;
+    private Button btnPointChange;
     private List<MyTask> mineTaskList = new ArrayList<>();
     private List<MyTask> otherTaskList = new ArrayList<>();
 
@@ -48,8 +49,15 @@ public class HomeFragment extends Fragment {
         setupOtherRecyclerView(view);
 
         btnAddCheck = view.findViewById(R.id.btn_addcheck);
+        btnPointChange = view.findViewById(R.id.btn_toPoint_home);
+
         btnAddCheck.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), newcheck.class);
+            startActivity(intent);
+        });
+
+        btnPointChange.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), PointActivity.class);
             startActivity(intent);
         });
 
