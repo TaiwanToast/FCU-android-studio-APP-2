@@ -92,7 +92,7 @@ public class show_check_detail extends AppCompatActivity {
                 Map<String, Object> data = userDoc.getData();
                 if (data != null && data.containsKey("followingTaskID")) {
                     Map<String, Object> followingMap = (Map<String, Object>) data.get("followingTaskID");
-                    if (followingMap.containsKey(taskID)) {
+                    if (followingMap != null && followingMap.containsKey(taskID)) {
                         btnFollow.setText("取消關注");
                     }
                 }
