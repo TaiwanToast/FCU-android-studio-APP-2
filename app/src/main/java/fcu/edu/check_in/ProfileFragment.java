@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import fcu.edu.check_in.adapter.FollowTaskAdapter;
 import fcu.edu.check_in.adapter.OtherTaskAdapter;
 import fcu.edu.check_in.model.MyTask;
 import fcu.edu.check_in.model.Person;

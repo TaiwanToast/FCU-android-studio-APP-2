@@ -35,7 +35,7 @@
             android:name=".RegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".FollowFragment"
+            android:name=".CheckInFragment"
             android:exported="false" />
         <activity
             android:name=".ProfileFragment"

@@ -1,0 +1,32 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- 积分兑换按钮 -->
+    <Button
+        android:id="@+id/btn_redeem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="積分兌換"
+        android:layout_alignParentStart="true"
+        android:layout_margin="16dp"/>
+
+    <!-- 积分显示 -->
+    <TextView
+        android:id="@+id/tv_points"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="積分：0"
+        android:textSize="18sp"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="16dp"/>
+
+    <!-- RecyclerView 用來顯示可打卡項目 -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_check_tasks"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/btn_redeem"
+        android:layout_marginTop="8dp"/>
+</RelativeLayout>

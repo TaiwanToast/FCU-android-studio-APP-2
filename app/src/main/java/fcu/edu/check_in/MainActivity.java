@@ -2,13 +2,10 @@ package fcu.edu.check_in;
 
 import static android.content.ContentValues.TAG;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -97,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
         // 建立 Fragment 實例
         Fragment homeFragment = new HomeFragment();
         Fragment profileFragment = new ProfileFragment();
-        Fragment followFragment = new FollowFragment();
+        Fragment followFragment = new CheckInFragment();
 
         // 根據傳入參數 navigate_to 決定初始 Fragment
         String destination = getIntent().getStringExtra("navigate_to");
