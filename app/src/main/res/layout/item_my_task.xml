@@ -10,21 +10,23 @@
         android:id="@+id/tv_my_task_title"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:background="#63673AB7"
+        android:background="#03A9F4"
         android:gravity="start"
         android:padding="10dp"
         android:text="mission title"
+        android:textColor="#FFFFFF"
         android:textSize="24sp" />
 
     <TextView
         android:id="@+id/tv_my_task_initiator"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#63673AB7"
+        android:background="#03A9F4"
         android:gravity="center"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
         android:text="name"
+        android:textColor="#FFFFFF"
         android:textSize="16sp" />
 
 </LinearLayout>
