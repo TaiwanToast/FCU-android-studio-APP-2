@@ -23,7 +23,7 @@
             android:id="@+id/btnBack"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="2"
             android:text="返回" />
 
         <View
@@ -33,7 +33,7 @@
 
         <Button
             android:id="@+id/btnFollow"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="關注" />
@@ -63,7 +63,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="8dp" />
 
-    <!-- 統計資訊（水平） -->
+    <TextView
+        android:id="@+id/ownerEmailText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:text="製作者 Email"
+        android:textColor="@android:color/holo_blue_dark"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/checkBio" />
+    <!-- 統計資訊（水平）
     <LinearLayout
         android:id="@+id/statSection"
         android:layout_width="0dp"
@@ -118,9 +131,9 @@
                 android:text="123"
                 android:textSize="16sp" />
         </LinearLayout>
-    </LinearLayout>
+    </LinearLayout> -->
 
-    <!-- 留言 -->
+    <!-- 留言
     <TextView
         android:id="@+id/commentTitle"
         android:layout_width="wrap_content"
@@ -130,9 +143,9 @@
         android:textStyle="bold"
         app:layout_constraintTop_toBottomOf="@id/statSection"
         app:layout_constraintStart_toStartOf="parent"
-        android:layout_marginTop="16dp" />
+        android:layout_marginTop="16dp" /> -->
 
-    <!-- RecyclerView 留言區 -->
+    <!-- RecyclerView 留言區
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/commentRecycler"
         android:layout_width="0dp"
@@ -141,6 +154,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="8dp" />
+        android:layout_marginTop="8dp" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -156,8 +156,8 @@ public class edit_check extends AppCompatActivity {
                                 }
 
                                 // 更新畫面文字
-                                checkTitle.setText(title);
-                                checkBio.setText(bio);
+                                checkTitle.setText("打卡單名稱"+title);
+                                checkBio.setText("簡介"+bio);
 
                                 // 儲存成員變數，供後續鬧鐘使用
                                 currentTaskTitle = title;
