@@ -84,16 +84,18 @@ public class HomeFragment extends Fragment {
 
         rvOtherTask.setLayoutManager(new LinearLayoutManager(getContext()));
         rvOtherTask.setAdapter(adapter);
+        SharedPreferences prefs = this.getActivity().getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("task")
-                .whereNotEqualTo("ownerEmail", "目前登入者的email") // 你可以用 FirebaseAuth.getInstance().getCurrentUser().getEmail()
+                .whereNotEqualTo("ownerEmail", prefs.getString("email", "")) // 你可以用 FirebaseAuth.getInstance().getCurrentUser().getEmail()
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
+                        otherTaskList.clear();
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             Map<String, Object> map = document.getData();
-                            otherTaskList.clear();
+//                            otherTaskList.clear();
                             adapter.notifyDataSetChanged();
                             otherTaskList.add(new MyTask((String) map.get("title"), (String) map.get("ownerEmail"),document.getId()));
                             adapter.notifyItemInserted(otherTaskList.size() - 1);
