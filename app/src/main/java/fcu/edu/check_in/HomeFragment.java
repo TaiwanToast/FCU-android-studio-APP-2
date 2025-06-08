@@ -108,21 +108,21 @@ public class HomeFragment extends Fragment {
     private void initMineTaskList(MyTaskAdapter adapter) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        // 取得 SharedPreferences 裡的 email
+        // 避免 fragment 尚未 attach
+        if (!isAdded()) return;
+
         SharedPreferences prefs = requireActivity().getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
         String email = prefs.getString("email", null);
         if (email == null) {
             Log.e("initMineTaskList", "email not found in SharedPreferences");
             return;
-
         }
 
-        // 清空舊資料
         mineTaskList.clear();
         adapter.notifyDataSetChanged();
 
-        // 取得使用者文件
         db.collection("users").document(email).get().addOnSuccessListener(userDoc -> {
+            if (!isAdded()) return;
             if (userDoc.exists()) {
                 Map<String, Object> data = userDoc.getData();
                 if (data != null && data.containsKey("followingTaskID")) {
@@ -136,12 +136,13 @@ public class HomeFragment extends Fragment {
                                 (String) followInfo.get("week") : "";
 
                         db.collection("task").document(taskID).get().addOnSuccessListener(taskDoc -> {
+                            if (!isAdded()) return;
                             if (taskDoc.exists()) {
                                 Map<String, Object> taskData = taskDoc.getData();
                                 if (taskData != null) {
                                     String title = (String) taskData.get("title");
                                     String ownerEmail = (String) taskData.get("ownerEmail");
-                                    MyTask myTask = new MyTask(title, ownerEmail,taskID);// startDate, week
+                                    MyTask myTask = new MyTask(title, ownerEmail, taskID);
                                     mineTaskList.add(myTask);
                                     adapter.notifyItemInserted(mineTaskList.size() - 1);
                                 }
@@ -154,6 +155,4 @@ public class HomeFragment extends Fragment {
             }
         }).addOnFailureListener(e -> Log.e("Firestore", "查詢使用者失敗：" + e.getMessage()));
     }
-
-
 }
