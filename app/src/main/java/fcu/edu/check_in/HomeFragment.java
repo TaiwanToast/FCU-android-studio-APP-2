@@ -108,7 +108,6 @@ public class HomeFragment extends Fragment {
     private void initMineTaskList(MyTaskAdapter adapter) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-        // 避免 fragment 尚未 attach
         if (!isAdded()) return;
 
         SharedPreferences prefs = requireActivity().getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
@@ -136,18 +135,21 @@ public class HomeFragment extends Fragment {
                             String week = followInfo != null && followInfo.containsKey("week") ?
                                     (String) followInfo.get("week") : "";
 
-                        db.collection("task").document(taskID).get().addOnSuccessListener(taskDoc -> {
-                            if (!isAdded()) return;
-                            if (taskDoc.exists()) {
-                                Map<String, Object> taskData = taskDoc.getData();
-                                if (taskData != null) {
-                                    String title = (String) taskData.get("title");
-                                    String ownerEmail = (String) taskData.get("ownerEmail");
-                                    MyTask myTask = new MyTask(title, ownerEmail, taskID);
-                                    mineTaskList.add(myTask);
-                                    adapter.notifyItemInserted(mineTaskList.size() - 1);
-                                }
-                            }).addOnFailureListener(e -> Log.e("Firestore", "查詢任務失敗：" + e.getMessage()));
+                            db.collection("task").document(taskID).get()
+                                    .addOnSuccessListener(taskDoc -> {
+                                        if (!isAdded()) return;
+                                        if (taskDoc.exists()) {
+                                            Map<String, Object> taskData = taskDoc.getData();
+                                            if (taskData != null) {
+                                                String title = (String) taskData.get("title");
+                                                String ownerEmail = (String) taskData.get("ownerEmail");
+                                                MyTask myTask = new MyTask(title, ownerEmail, taskID);
+                                                mineTaskList.add(myTask);
+                                                adapter.notifyItemInserted(mineTaskList.size() - 1);
+                                            }
+                                        }
+                                    })
+                                    .addOnFailureListener(e -> Log.e("Firestore", "查詢任務失敗：" + e.getMessage()));
                         }
                     }
                 } else {
