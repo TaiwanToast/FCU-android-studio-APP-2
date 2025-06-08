@@ -1,9 +1,5 @@
 [versions]
-<<<<<<< Updated upstream
 agp = "8.10.1"
-=======
-agp = "8.9.2"
->>>>>>> Stashed changes
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
