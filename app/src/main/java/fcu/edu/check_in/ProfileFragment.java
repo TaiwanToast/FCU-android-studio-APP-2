@@ -139,18 +139,20 @@ public class ProfileFragment extends Fragment {
                 Map<String, Object> data = userDoc.getData();
                 if (data != null && data.containsKey("followingTaskID")) {
                     Map<String, Object> followingMap = (Map<String, Object>) data.get("followingTaskID");
-                    for (String taskID : followingMap.keySet()) {
-                        db.collection("task").document(taskID).get().addOnSuccessListener(taskDoc -> {
-                            if (taskDoc.exists()) {
-                                Map<String, Object> taskData = taskDoc.getData();
-                                if (taskData != null) {
-                                    String title = (String) taskData.get("title");
-                                    String ownerEmail = (String) taskData.get("ownerEmail");
-                                    taskList.add(new MyTask(title, ownerEmail, taskID));
-                                    taskAdapter.notifyItemInserted(taskList.size() - 1);
+                    if (followingMap != null && !followingMap.isEmpty()) {
+                        for (String taskID : followingMap.keySet()) {
+                            db.collection("task").document(taskID).get().addOnSuccessListener(taskDoc -> {
+                                if (taskDoc.exists()) {
+                                    Map<String, Object> taskData = taskDoc.getData();
+                                    if (taskData != null) {
+                                        String title = (String) taskData.get("title");
+                                        String ownerEmail = (String) taskData.get("ownerEmail");
+                                        taskList.add(new MyTask(title, ownerEmail, taskID));
+                                        taskAdapter.notifyItemInserted(taskList.size() - 1);
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        }
                     }
                 }
             }
