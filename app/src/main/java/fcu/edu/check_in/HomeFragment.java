@@ -128,12 +128,13 @@ public class HomeFragment extends Fragment {
                 if (data != null && data.containsKey("followingTaskID")) {
                     Map<String, Object> followingMap = (Map<String, Object>) data.get("followingTaskID");
 
-                    for (String taskID : followingMap.keySet()) {
-                        Map<String, Object> followInfo = (Map<String, Object>) followingMap.get(taskID);
-                        String startDate = followInfo != null && followInfo.containsKey("startDate") ?
-                                (String) followInfo.get("startDate") : "";
-                        String week = followInfo != null && followInfo.containsKey("week") ?
-                                (String) followInfo.get("week") : "";
+                    if (followingMap != null && !followingMap.isEmpty()) {
+                        for (String taskID : followingMap.keySet()) {
+                            Map<String, Object> followInfo = (Map<String, Object>) followingMap.get(taskID);
+                            String startDate = followInfo != null && followInfo.containsKey("startDate") ?
+                                    (String) followInfo.get("startDate") : "";
+                            String week = followInfo != null && followInfo.containsKey("week") ?
+                                    (String) followInfo.get("week") : "";
 
                         db.collection("task").document(taskID).get().addOnSuccessListener(taskDoc -> {
                             if (!isAdded()) return;
@@ -146,8 +147,8 @@ public class HomeFragment extends Fragment {
                                     mineTaskList.add(myTask);
                                     adapter.notifyItemInserted(mineTaskList.size() - 1);
                                 }
-                            }
-                        }).addOnFailureListener(e -> Log.e("Firestore", "查詢任務失敗：" + e.getMessage()));
+                            }).addOnFailureListener(e -> Log.e("Firestore", "查詢任務失敗：" + e.getMessage()));
+                        }
                     }
                 } else {
                     Log.w("initMineTaskList", "使用者沒有 followingTaskID 欄位");

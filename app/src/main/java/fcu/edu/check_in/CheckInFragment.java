@@ -104,32 +104,34 @@ public class CheckInFragment extends Fragment implements CheckTaskAdapter.Fragme
 
             LocalTime now = LocalTime.now();
 
-            for (String taskId : taskMap.keySet()) {
-                Map<String, Object> taskInfo = (Map<String, Object>) taskMap.get(taskId);
-                String startime = (String) taskInfo.get("startime");
-                String week = (String) taskInfo.get("week");
+            if (taskMap != null && !taskMap.isEmpty()) {
+                for (String taskId : taskMap.keySet()) {
+                    Map<String, Object> taskInfo = (Map<String, Object>) taskMap.get(taskId);
+                    String startime = (String) taskInfo.get("startime");
+                    String week = (String) taskInfo.get("week");
 
-                // 1. 週幾檢查
-                if (!week.contains(todayStr)) continue;
+                    // 1. 週幾檢查
+                    if (!week.contains(todayStr)) continue;
 
-                // 2. 時間比較
-                String[] times = startime.split("~");
-                if (times.length != 2) continue;
+                    // 2. 時間比較
+                    String[] times = startime.split("~");
+                    if (times.length != 2) continue;
 
-                try {
-                    LocalTime endTime = LocalTime.parse(times[1]);
+                    try {
+                        LocalTime endTime = LocalTime.parse(times[1]);
 
-                    if (now.isAfter(endTime)) continue; // 如果已過結束時間就不顯示
+                        if (now.isAfter(endTime)) continue; // 如果已過結束時間就不顯示
 
-                    // 3. TODO: 檢查是否已打卡 (這部分視你打卡記錄儲存在哪裡)
+                        // 3. TODO: 檢查是否已打卡 (這部分視你打卡記錄儲存在哪裡)
 
-                    // 加入任務列表
-                    CheckTask task = new CheckTask(taskId, startime, week);
-                    taskList.add(task);
-                    adapter.notifyItemInserted(taskList.size() - 1);
+                        // 加入任務列表
+                        CheckTask task = new CheckTask(taskId, startime, week);
+                        taskList.add(task);
+                        adapter.notifyItemInserted(taskList.size() - 1);
 
-                } catch (DateTimeParseException e) {
-                    Log.e("CheckInFragment", "時間格式錯誤: " + startime);
+                    } catch (DateTimeParseException e) {
+                        Log.e("CheckInFragment", "時間格式錯誤: " + startime);
+                    }
                 }
             }
         });
