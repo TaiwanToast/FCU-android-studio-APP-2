@@ -85,13 +85,10 @@ public class PointActivity extends AppCompatActivity {
             startActivity(intent);
         });
     }
-    private void REPoint(){
-        SharedPreferences prefs = getSharedPreferences("point", MODE_PRIVATE);
-        Integer point = prefs.getInt("point", 0);
-        tvPoint.setText("積分: "+point.toString());
-    }
     private void saveRewardToPreferences(String rewardName, int costPoint) {
-        SharedPreferences prefs = getSharedPreferences("point", MODE_PRIVATE);
+        SharedPreferences prefse = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        String email = prefse.getString("email", "");
+        SharedPreferences prefs = getSharedPreferences(email+"point", MODE_PRIVATE);
         String currentData = prefs.getString("point_list", "");
         currentData += rewardName + ":" + costPoint + ";";
         prefs.edit().putString("point_list", currentData).apply();
@@ -99,7 +96,9 @@ public class PointActivity extends AppCompatActivity {
 
     private void loadDataFromPreferences() {
         dataList.clear();
-        SharedPreferences prefs = getSharedPreferences("point", MODE_PRIVATE);
+        SharedPreferences prefse = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        String email = prefse.getString("email", "");
+        SharedPreferences prefs = getSharedPreferences(email+"_point", MODE_PRIVATE);
         String dataStr = prefs.getString("point_list", "");
         if (!dataStr.isEmpty()) {
             String[] items = dataStr.split(";");
@@ -180,12 +179,16 @@ public class PointActivity extends AppCompatActivity {
     }
 
     private int getCurrentPoint() {
-        SharedPreferences prefs = getSharedPreferences("point", MODE_PRIVATE);
+        SharedPreferences prefse = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        String email = prefse.getString("email", "");
+        SharedPreferences prefs = getSharedPreferences(email+"_point", MODE_PRIVATE);
         return prefs.getInt("point", 0);
     }
 
     private void saveCurrentPoint(int point) {
-        SharedPreferences prefs = getSharedPreferences("point", MODE_PRIVATE);
+        SharedPreferences prefse = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        String email = prefse.getString("email", "");
+        SharedPreferences prefs = getSharedPreferences(email+"_point", MODE_PRIVATE);
         prefs.edit().putInt("point", point).apply();
     }
 
@@ -195,7 +198,9 @@ public class PointActivity extends AppCompatActivity {
     }
 
     private void deleteReward(PointChangeMono item) {
-        SharedPreferences prefs = getSharedPreferences("point", MODE_PRIVATE);
+        SharedPreferences prefse = getSharedPreferences("user_prefs", MODE_PRIVATE);
+        String email = prefse.getString("email", "");
+        SharedPreferences prefs = getSharedPreferences(email+"_point", MODE_PRIVATE);
         String dataStr = prefs.getString("point_list", "");
 
         StringBuilder newData = new StringBuilder();
