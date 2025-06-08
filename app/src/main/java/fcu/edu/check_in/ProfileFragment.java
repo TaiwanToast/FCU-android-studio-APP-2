@@ -16,9 +16,18 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import fcu.edu.check_in.adapter.FollowTaskAdapter;
+import fcu.edu.check_in.adapter.OtherTaskAdapter;
+import fcu.edu.check_in.model.MyTask;
 import fcu.edu.check_in.model.Person;
 import fcu.edu.check_in.model.PersonManager;
 
@@ -28,16 +37,20 @@ public class ProfileFragment extends Fragment {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     private SharedPreferences prefs;
-    private TextView tvName,tvBio;
-    private Button btnLogout;
-    private Button btnSetting;
+
+    private TextView tvName, tvBio;
+    private Button btnLogout, btnSetting;
+    private RecyclerView recyclerView;
+    private OtherTaskAdapter taskAdapter;
+    private List<MyTask> taskList = new ArrayList<>();
+
+    private ActivityResultLauncher<Intent> editProfileLauncher;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         prefs = context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE);
     }
-    private ActivityResultLauncher<Intent> editProfileLauncher;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,21 +62,32 @@ public class ProfileFragment extends Fragment {
                     if (result.getResultCode() == getActivity().RESULT_OK && result.getData() != null) {
                         boolean updated = result.getData().getBooleanExtra("profile_updated", false);
                         if (updated) {
-                            // 收到編輯完成通知，重新刷新畫面
                             showUserInfo();
+                            loadFollowedTasks();
                         }
                     }
                 });
     }
 
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        btnLogout = view.findViewById(R.id.btn_logout);
         tvName = view.findViewById(R.id.text_nickname);
         tvBio = view.findViewById(R.id.tv_bio);
+        btnLogout = view.findViewById(R.id.btn_logout);
         btnSetting = view.findViewById(R.id.btnsetting);
+        recyclerView = view.findViewById(R.id.recycler_checklists);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        // 使用成員變數，不要重新宣告
+        taskAdapter = new OtherTaskAdapter(taskList);
+        recyclerView.setAdapter(taskAdapter);
 
         btnLogout.setOnClickListener(v -> {
             prefs.edit().putBoolean("is_logged_in", false).apply();
@@ -73,53 +97,64 @@ public class ProfileFragment extends Fragment {
         });
 
         btnSetting.setOnClickListener(v -> {
-            Intent intenttosetting = new Intent(getActivity(), edit_Profile.class);
-            editProfileLauncher.launch(intenttosetting);  // 用 launcher 啟動編輯頁面
+            Intent intent = new Intent(getActivity(), edit_Profile.class);
+            editProfileLauncher.launch(intent);
         });
 
         showUserInfo();
-
-
-//        DocumentReference docRef = db.collection("users").document(email);
-//        docRef.get().addOnCompleteListener(task -> {
-//            if (task.isSuccessful()) {
-//                DocumentSnapshot document = task.getResult();
-//                if (document.exists()) {
-//                    Map<String, Object> map = document.getData();
-//                    if (map != null && map.containsKey("nickName")) {
-//                        Object nicknameObj = map.get("nickName");
-//                        tvName.setText(nicknameObj != null ? nicknameObj.toString() : "無暱稱");
-//                    } else {
-//                        tvName.setText("暱稱未設定");
-//                    }
-//                } else {
-//                    Log.w(TAG, "使用者資料不存在");
-//                    tvName.setText("查無使用者資料");
-//                }
-//            } else {
-//                Log.e(TAG, "Firestore 查詢失敗", task.getException());
-//                tvName.setText("載入使用者資料失敗");
-//            }
-//        });
+        loadFollowedTasks();
 
         return view;
     }
 
-        private void showUserInfo() {
-            String email = prefs.getString("email", null);
-            if (email == null || email.isEmpty()) {
-                Log.e(TAG, "Email 為 null 或空字串");
-                tvName.setText("尚未登入使用者");
-                return;
-            }
 
-            Person person = PersonManager.getInstance().getCurrentPerson();
-            if (person != null) {
-                tvName.setText(person.getNickName() != null ? person.getNickName() : "無暱稱");
-                tvBio.setText(person.getBio() != null ? person.getBio() : "尚未填寫簡介");
-            } else {
-                tvName.setText("資料尚未載入");
-                tvBio.setText("");
-            }
+    private void showUserInfo() {
+        String email = prefs.getString("email", null);
+        if (email == null || email.isEmpty()) {
+            Log.e(TAG, "Email 為 null 或空字串");
+            tvName.setText("尚未登入使用者");
+            tvBio.setText("");
+            recyclerView.setAdapter(null);
+            return;
+        }
+
+        Person person = PersonManager.getInstance().getCurrentPerson();
+        if (person != null) {
+            tvName.setText(person.getNickName() != null ? person.getNickName() : "無暱稱");
+            tvBio.setText(person.getBio() != null ? person.getBio() : "尚未填寫簡介");
+        } else {
+            tvName.setText("資料尚未載入");
+            tvBio.setText("");
         }
     }
+
+    private void loadFollowedTasks() {
+        String email = prefs.getString("email", null);
+        if (email == null) return;
+
+        taskList.clear();
+        taskAdapter.notifyDataSetChanged();
+
+        db.collection("users").document(email).get().addOnSuccessListener(userDoc -> {
+            if (userDoc.exists()) {
+                Map<String, Object> data = userDoc.getData();
+                if (data != null && data.containsKey("followingTaskID")) {
+                    Map<String, Object> followingMap = (Map<String, Object>) data.get("followingTaskID");
+                    for (String taskID : followingMap.keySet()) {
+                        db.collection("task").document(taskID).get().addOnSuccessListener(taskDoc -> {
+                            if (taskDoc.exists()) {
+                                Map<String, Object> taskData = taskDoc.getData();
+                                if (taskData != null) {
+                                    String title = (String) taskData.get("title");
+                                    String ownerEmail = (String) taskData.get("ownerEmail");
+                                    taskList.add(new MyTask(title, ownerEmail, taskID));
+                                    taskAdapter.notifyItemInserted(taskList.size() - 1);
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+        });
+    }
+}
