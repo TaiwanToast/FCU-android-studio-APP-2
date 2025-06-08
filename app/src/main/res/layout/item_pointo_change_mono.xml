@@ -25,16 +25,6 @@
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/tv_pointo_status"
-            android:layout_width="30dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="left"
-            android:textColor="#FFFFFF"
-            android:textSize="12sp" />
-
-        <TextView
             android:id="@+id/tv_pointo_pointCost"
             android:layout_width="30dp"
             android:layout_height="wrap_content"

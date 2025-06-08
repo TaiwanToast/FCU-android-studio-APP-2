@@ -31,13 +31,14 @@
             android:id="@+id/tv_title_point"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="ポイント交換"
+            android:text="好好獎勵自己吧"
             android:textAlignment="center"
             android:textColor="#FFFFFF"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/btn_to_home_point"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@id/btn_back_point"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -51,17 +52,48 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayoutInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/titleBar">
+
+        <EditText
+            android:id="@+id/editTextRewardName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="3"
+            android:hint="獎勵名稱"
+            android:inputType="text" />
+
+        <EditText
+            android:id="@+id/editTextPointCost"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="點數"
+            android:inputType="number" />
+
+        <Button
+            android:id="@+id/btnAddReward"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="新增" />
+    </LinearLayout>
+
 
     <TextView
         android:id="@+id/tv_showPoint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="P : ???"
+        android:text="積分 : ???"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleBar" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayoutInput" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcv_changeMono"

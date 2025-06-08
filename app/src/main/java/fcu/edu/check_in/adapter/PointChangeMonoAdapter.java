@@ -16,9 +16,18 @@ import fcu.edu.check_in.model.PointChangeMono;
 public class PointChangeMonoAdapter extends RecyclerView.Adapter<PointChangeMonoAdapter.ViewHolder> {
 
     private final List<PointChangeMono> pointList;
+    private OnItemClickListener listener;
+
+    public interface OnItemClickListener {
+        void onItemClick(PointChangeMono item);
+    }
 
     public PointChangeMonoAdapter(List<PointChangeMono> pointList) {
         this.pointList = pointList;
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener){
+        this.listener = listener;
     }
 
     @NonNull
@@ -32,15 +41,14 @@ public class PointChangeMonoAdapter extends RecyclerView.Adapter<PointChangeMono
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         PointChangeMono point = pointList.get(position);
-
         holder.itemText.setText(point.getItem());
-        holder.statusText.setText(getStatusString(point.getStatus()));
+        holder.pointCostText.setText(String.valueOf(point.getCostPoint()));
 
-        if (point.getStatus() == 0) {
-            holder.pointCostText.setText("無法兌換");
-        } else {
-            holder.pointCostText.setText("P：" + point.getCostPoint());
-        }
+        holder.itemView.setOnClickListener(v -> {
+            if(listener != null){
+                listener.onItemClick(point);
+            }
+        });
     }
 
     @Override
@@ -50,24 +58,12 @@ public class PointChangeMonoAdapter extends RecyclerView.Adapter<PointChangeMono
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView itemText;
-        TextView statusText;
         TextView pointCostText;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             itemText = itemView.findViewById(R.id.tv_pointo_Items);
-            statusText = itemView.findViewById(R.id.tv_pointo_status);
             pointCostText = itemView.findViewById(R.id.tv_pointo_pointCost);
-        }
-    }
-
-    private String getStatusString(int status) {
-        if (status == 0) {
-            return "兌換完畢";
-        } else if (status == -1) {
-            return "剩餘：∞ 個";
-        } else {
-            return "剩餘：" + status + " 個";
         }
     }
 }

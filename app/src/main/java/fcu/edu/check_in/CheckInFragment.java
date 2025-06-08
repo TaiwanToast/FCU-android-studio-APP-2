@@ -63,8 +63,8 @@ public class CheckInFragment extends Fragment implements CheckTaskAdapter.Fragme
         recyclerView.setAdapter(adapter);
 
         btnRedeem.setOnClickListener(v -> {
-            // 開啟積分兌換頁面
-            //startActivity(new Intent(getContext(), PointExchangeActivity.class));
+            Intent intent = new Intent(getActivity(), PointActivity.class);
+            startActivity(intent);
         });
 
         loadCheckTasks();
