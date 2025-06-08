@@ -120,7 +120,7 @@ public class edit_check extends AppCompatActivity {
                 Map<String, Object> data = userDoc.getData();
                 if (data != null && data.containsKey("followingTaskID")) {
                     Map<String, Object> followingMap = (Map<String, Object>) data.get("followingTaskID");
-                    if (followingMap.containsKey(taskID)) {
+                    if (followingMap != null && followingMap.containsKey(taskID)) {
                         Map<String, Object> userTaskData = (Map<String, Object>) followingMap.get(taskID);
 
                         // 讀 startime, week
